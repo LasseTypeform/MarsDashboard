@@ -14,15 +14,28 @@ app.use('/', express.static(path.join(__dirname, '../public')))
 
 // your API calls
 
-// example API call
-app.get('/apod', async (req, res) => {
+app.get('/rovers', async (req, res) => {
+    console.log('res from API Call', res)
     try {
-        let image = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${process.env.API_KEY}`)
-            .then(res => res.json())
-        res.send({ image })
+
+        let data = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=2020-12-12&api_key=${process.env.API_KEY}`)
+        .then(res => res.json())
+          res.send({data})
     } catch (err) {
         console.log('error:', err);
     }
+
 })
+
+// example API call
+// app.get('/apod', async (req, res) => {
+//     try {
+//         let image = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${process.env.API_KEY}`)
+//             .then(res => res.json())
+//         res.send({ image })
+//     } catch (err) {
+//         console.log('error:', err);
+//     }
+// })
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
