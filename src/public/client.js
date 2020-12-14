@@ -1,4 +1,14 @@
+//<reference path='./node_modules/immutable/dist/immutable.d.ts'/>
+// import { Immutable } from '../../node_modules/immutable/dist/immutable';
+
+
+// const { List } = require('../../node_modules/immutable/dist/immutable');
+
+// const List  = require('immutable')
+
 let store = {
+
+    data:{
     rover_name: "Curiosity",
     rover_status: "active",
     rover_id: 5,
@@ -10,7 +20,9 @@ let store = {
     earth_date: "2020-12-12",
     id: 782753,
     img_src: "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/02969/opgs/edr/fcam/FLB_661081489EDR_F0841360FHAZ00337M_.JPG"
-    
+    }
+    ,
+    rovers: Immutable.List(['Curiosity', 'Opportunity', 'Spirit'])
 }
 
 
