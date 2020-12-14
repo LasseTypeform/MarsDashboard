@@ -1,8 +1,18 @@
 let store = {
-    user: { name: "Student" },
-    data: '',
-    rovers: ['Curiosity', 'Opportunity', 'Spirit']
+    rover_name: "Curiosity",
+    rover_status: "active",
+    rover_id: 5,
+    landing_date: "2012-08-06",
+    launch_date: "2011-11-26",
+    camera_full_name: "Front Hazard Avoidance Camera",
+    camera_id: 20,
+    camera_name: "FHAZ",
+    earth_date: "2020-12-12",
+    id: 782753,
+    img_src: "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/02969/opgs/edr/fcam/FLB_661081489EDR_F0841360FHAZ00337M_.JPG"
+    
 }
+
 
 // add our markup to the page
 const root = document.getElementById('root')
@@ -19,8 +29,12 @@ const render = async (root, state) => {
 
 // create content
 const App = (state) => {
-    console.log(state)
-    let { rovers, apod } = state
+
+    let rovers  = state
+
+    console.log('rovers', rovers)
+
+
 
     return `
         <header>
@@ -32,19 +46,16 @@ const App = (state) => {
             </div>
         </header>
         <main>
-       
             <section>
-                <h3>Put things on the page!</h3>
-                <p>Here is an example section.</p>
-                <p>
-                    One of the most popular websites at NASA is the Astronomy Picture of the Day. In fact, this website is one of
-                    the most popular websites across all federal agencies. It has the popular appeal of a Justin Bieber video.
-                    This endpoint structures the APOD imagery and associated metadata so that it can be repurposed for other
-                    applications. In addition, if the concept_tags parameter is set to True, then keywords derived from the image
-                    explanation are returned. These keywords could be used as auto-generated hashtags for twitter or instagram feeds;
-                    but generally help with discoverability of relevant imagery.
-                </p>
-       
+                <h3><strong>rover name:</strong> ${rovers.rover_name}</h3>
+                <h2><strong>rover id:</strong> ${rovers.rover_id}</h2>
+                <p><strong>rover status:</strong> ${rovers.rover_status}</P>
+                <p><strong>landing date:</strong> ${rovers.landing_date}</P>
+                <p><strong>launch date:</strong> ${rovers.launch_date}</P>
+                <p><strong>camera full_name:</strong> ${rovers.camera_full_name}</P>
+                <p><strong>camera id:</strong> ${rovers.camera_id}</P>
+                <p><strong>camera name:</strong> ${rovers.camera_name}</P>
+                <p><strong>earth date:</strong> ${rovers.earth_date}</P>       
             </section>
         </main>
         <footer></footer>
@@ -106,12 +117,12 @@ window.addEventListener('load', () => {
 
 // const temp = {};
 
-const getImageOfTheDay = () => {
+const getInformationAboutRover = () => {
         fetch(`http://localhost:3000/rovers`)
         .then(res => console.log(res.json()))
         // .then(apod => updateStore(store, { apod }))     
        
         
 }
-getImageOfTheDay(store)
+getInformationAboutRover()
 console.log(store)
