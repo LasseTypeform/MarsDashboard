@@ -7,7 +7,6 @@
 // const List  = require('immutable')
 
 let store = {
-
     data:{
     rover_name: "Curiosity",
     rover_status: "active",
@@ -20,8 +19,8 @@ let store = {
     earth_date: "2020-12-12",
     id: 782753,
     img_src: "https://mars.nasa.gov/msl-raw-images/proj/msl/redops/ods/surface/sol/02969/opgs/edr/fcam/FLB_661081489EDR_F0841360FHAZ00337M_.JPG"
-    }
-    ,
+    },
+    image: [],
     rovers: Immutable.List(['Curiosity', 'Opportunity', 'Spirit'])
 }
 
@@ -29,7 +28,7 @@ let store = {
 // add our markup to the page
 const root = document.getElementById('root')
 
-const updateStore = (newState) => {
+const updateStore = (store, newState) => {
     store = Object.assign(store, newState)
     render(root, store)
 }
@@ -52,22 +51,31 @@ const App = (state) => {
         <header>
         <h1>Choose a Rover</h1>
             <div id='roverDiv'>
-                <h2>Curiosity</h2>
-                <h2>Opportunity</h2>
-                <h2>Spirit</h2>
+                <ul>
+                    <li><a href=#>Curiosity</a></li>
+                    <li><a href=#>Opportunity</a></li>
+                    <li><a href=#>Spirit</a></li>
+                </ul>
             </div>
         </header>
         <main>
             <section>
-                <h3><strong>rover name:</strong> ${rovers.rover_name}</h3>
-                <h2><strong>rover id:</strong> ${rovers.rover_id}</h2>
-                <p><strong>rover status:</strong> ${rovers.rover_status}</P>
-                <p><strong>landing date:</strong> ${rovers.landing_date}</P>
-                <p><strong>launch date:</strong> ${rovers.launch_date}</P>
-                <p><strong>camera full_name:</strong> ${rovers.camera_full_name}</P>
-                <p><strong>camera id:</strong> ${rovers.camera_id}</P>
-                <p><strong>camera name:</strong> ${rovers.camera_name}</P>
-                <p><strong>earth date:</strong> ${rovers.earth_date}</P>       
+                <div class="roverDetails">
+                    <h2><strong>rover name:</strong> ${rovers.data.rover_name}</h2>
+                    <h3><strong>rover id:</strong> ${rovers.data.rover_id}</h3>
+                    <p><strong>rover status:</strong> ${rovers.data.rover_status}</p>
+                    <p><strong>landing on Mars date:</strong> ${rovers.data.landing_date}</p>
+                    <p><strong>launch from Earth date:</strong> ${rovers.data.launch_date}</p>
+                </div>
+                <h3><strong>date corresponding to date on Earth:</strong> ${rovers.data.earth_date}</h3>
+                <div class="imagesContainer">
+                    <div class="imageData">
+                        <img class="image" src="${rovers.data.img_src}">
+                        <p><strong>camera full name:</strong> ${rovers.data.camera_full_name}</p>
+                        <p><strong>camera id:</strong> ${rovers.data.camera_id}</p>
+                        <p><strong>camera short name:</strong> ${rovers.data.camera_name}</p>
+                    </div>
+                </div>
             </section>
         </main>
         <footer></footer>
@@ -129,12 +137,17 @@ window.addEventListener('load', () => {
 
 // const temp = {};
 
-const getInformationAboutRover = () => {
-        fetch(`http://localhost:3000/rovers`)
-        .then(res => console.log(res.json()))
-        // .then(apod => updateStore(store, { apod }))     
-       
+async function getInformationAboutRover(){
+        const res = await fetch(`http://localhost:3000/rovers`)
+     
+        const data = await res.json()
+        console.log(data.data.photos)
+
+        let temp = {image: data.data.photos}
+
+       updateStore(store, temp)  
         
+       console.log('store after update', store)
+
 }
 getInformationAboutRover()
-console.log(store)

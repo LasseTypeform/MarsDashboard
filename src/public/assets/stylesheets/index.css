@@ -7,24 +7,51 @@ body {
   min-height: 100vh;
 }
 
+/* Header section */
 header {
   width: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
-
-#roverDiv {
+#roverDiv ul {
   display: inline-flex;
   justify-content: space-around;
   width: 100%;
+  padding: 0;
 }
 
+#roverDiv ul li, #roverDiv ul li a {
+  text-decoration: none;
+  list-style: none;
+  margin: 0.5em;
+  color: black;
+  background-color: lightgray;
+}
+
+/* Main section */
 main {
   flex: 1;
   padding: 20px;
 }
 
+.roverDetails{
+  display: inline-flex;
+  background-color: lightslategray;
+}
+
+/* Images */
+.imageContainer {
+  display: inline-flex;
+  flex-wrap: wrap;
+}
+.imageData {
+  display: flex;
+  flex-direction: column;
+}
+.image{
+  max-height: 400px;
+}
 footer {
   /* footer styles */
 }
