@@ -1,6 +1,4 @@
 require('dotenv').config()
-
-
 const express = require('express')
 const bodyParser = require('body-parser')
 const fetch = require('node-fetch')
@@ -16,29 +14,23 @@ app.use('/', express.static(path.join(__dirname, '../public')))
 
 // your API calls
 
+
+// Get information about Rover
 app.get('/rovers', async (req, res) => {
     try {
-
         let data = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/curiosity/photos?earth_date=2020-12-12&api_key=${process.env.API_KEY}`)
-        .then(res => res.json())
-          res.send({data})
+          .then(res => res.json())
+          res.send({ data })
+     
     } catch (err) {
         console.log('error:', err);
     }
 
 })
 
+
+
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
 
 
-// example API call
-// app.get('/apod', async (req, res) => {
-//     try {
-//         let image = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${process.env.API_KEY}`)
-//             .then(res => res.json())
-//         res.send({ image })
-//     } catch (err) {
-//         console.log('error:', err);
-//     }
-// })
