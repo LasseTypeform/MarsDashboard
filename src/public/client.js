@@ -28,25 +28,38 @@ const App = (state) => {
         <h1>Choose a Rover</h1>
             <div id='roverDiv'>
                 <ul>
-                    <li><a href=#>Curiosity</a></li>
-                    <li><a href=#>Opportunity</a></li>
-                    <li><a href=#>Spirit</a></li>
+                    <button onClick="pickRover('curiosity')",href=#>Curiosity</button>
+                    <button onClick="pickRover('opportunity')",href=#>Opportunity</button>
+                    <button onClick="pickRover('spirit')",href=#>Spirit</button>
                 </ul>
             </div>
         </header>
         <main>
             <section>
-                <div class="roverDetails">
-                <h3><strong>date corresponding to date on Earth:</strong> ${rovers.data.data.photos[0].earth_date}</h3>
-
-                </div>
-                <img src="${rovers.data.data.photos[0].img_src}" alt='Photo taken by'/>       
+                
+                    
             </section>
         </main>
         <footer></footer>
-    `
-    )
-    }
+    `)
+    } else return (`
+        <header>
+            <h1>Choose a Rover</h1>
+                <div id='roverDiv'>
+                    <ul>
+                        <button onClick="pickRover('curiosity')",href=#>Curiosity</button>
+                        <button onClick="pickRover('opportunity')",href=#>Opportunity</button>
+                        <button onClick="pickRover('spirit')",href=#>Spirit</button>
+                    </ul>
+                </div>
+            </header>
+            <main>
+                <section>
+                   
+                </section>
+            </main>
+            <footer></footer>
+    `)
 }
 
 // listening for load event because page should load before any JS is called
@@ -56,7 +69,35 @@ window.addEventListener('load', () => {
 
 // ------------------------------------------------------  COMPONENTS
 
+function pickRover(string){
 
+    let roverChosen = string 
+
+    let pickedRover = { roverChosen }
+    console.log('pickedRover in BtnCall', pickedRover)
+    updateStore(store, pickedRover)
+
+    return getInformationAboutRover(store);
+
+}
+
+// const showDataofRover = () => {
+
+//     let rovers
+
+//     return(<div> 
+//     {rovers.data.data.photos ?
+//     <div class="roverDetails">
+//     <h3><strong>date corresponding to date on Earth:</strong> ${rovers.data.data.photos[0].earth_date}</h3> </div>
+//     <img src="${rovers.data.data.photos[0].img_src}" alt='Photo taken by'/>       
+//         }
+//         else { <h3> No Data Received </h3> }
+//     }
+//     </div>
+//     )
+
+
+// } 
 // Example of a pure function that renders infomation requested from the backend
 // const ImageOfTheDay = (apod) => {
 
@@ -94,8 +135,11 @@ window.addEventListener('load', () => {
 
 
 
-async function getInformationAboutRover(){
-    const res = await fetch(`http://localhost:3000/rovers`)
+async function getInformationAboutRover(state){
+
+    const nameParam = state.roverChosen
+
+    const res = await fetch(`http://localhost:3000/rovers/${nameParam}`)
 
     const data = await res.json()
     console.log('data in call', data);
@@ -103,7 +147,7 @@ async function getInformationAboutRover(){
 
    updateStore(store, temp)     
 }
-getInformationAboutRover();
+
 console.log('store after call', store)
 
 
