@@ -21,7 +21,8 @@ app.get('/rovers/:name', async (req, res) => {
     let nameParam = req.params.name
 
     try {
-        let data = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/photos?earth_date=2020-12-12&api_key=${process.env.API_KEY}`)
+        // let data = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/photos?earth_date=2018-12-12&api_key=${process.env.API_KEY}`)
+        let data = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/latest_photos?api_key=${process.env.API_KEY}`)
           .then(res => res.json())
           res.send({ data })
      

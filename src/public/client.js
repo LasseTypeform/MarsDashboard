@@ -22,7 +22,7 @@ const render = async (root, state) => {
 const App = (state) => {    
     let rovers  = state
     console.log('state', state)
-    if(rovers.data !== '') {
+    if(rovers.data !== '' && rovers.data.data.photos !== []) {
     return (`
         <header>
         <h1>Choose a Rover</h1>
@@ -36,8 +36,8 @@ const App = (state) => {
         </header>
         <main>
             <section>
-                
-                    
+                <h3><strong>date corresponding to date on Earth:</strong> ${rovers.data.data.latest_photos[0].earth_date}</h3> </div>
+                <img src="${rovers.data.data.latest_photos[0].img_src}" alt='Photo taken by'/>  
             </section>
         </main>
         <footer></footer>
@@ -55,7 +55,8 @@ const App = (state) => {
             </header>
             <main>
                 <section>
-                   
+                <div class="roverDetails">
+                    <h3> No Data collected </h3>
                 </section>
             </main>
             <footer></footer>
@@ -81,23 +82,6 @@ function pickRover(string){
 
 }
 
-// const showDataofRover = () => {
-
-//     let rovers
-
-//     return(<div> 
-//     {rovers.data.data.photos ?
-//     <div class="roverDetails">
-//     <h3><strong>date corresponding to date on Earth:</strong> ${rovers.data.data.photos[0].earth_date}</h3> </div>
-//     <img src="${rovers.data.data.photos[0].img_src}" alt='Photo taken by'/>       
-//         }
-//         else { <h3> No Data Received </h3> }
-//     }
-//     </div>
-//     )
-
-
-// } 
 // Example of a pure function that renders infomation requested from the backend
 // const ImageOfTheDay = (apod) => {
 
