@@ -23,22 +23,39 @@ const App = (state) => {
     let rovers  = state
     console.log('state', state)
     if(rovers.data !== '' && rovers.data.data.photos !== []) {
+    
+    let images = rovers.data.data.latest_photos.map(ele => ele)
+
     return (`
         <header>
         <h1>Choose a Rover</h1>
             <div id='roverDiv'>
                 <ul>
-                    <button onClick="pickRover('curiosity')",href=#>Curiosity</button>
-                    <button onClick="pickRover('opportunity')",href=#>Opportunity</button>
-                    <button onClick="pickRover('spirit')",href=#>Spirit</button>
+                    <button onClick="pickRover('Curiosity')",href=#>Curiosity</button>
+                    <button onClick="pickRover('Opportunity')",href=#>Opportunity</button>
+                    <button onClick="pickRover('Spirit')",href=#>Spirit</button>
                 </ul>
             </div>
         </header>
         <main>
-            <section>
+            <section class="roverInfoSection">
+                <h2>Rover Name: ${rovers.roverChosen}</h2>
+                <h3>Launch Date: ${rovers.data.data.latest_photos[0].rover.launch_date}</h3>
+                <h3>Landing Date: ${rovers.data.data.latest_photos[0].rover.landing_date}</h3>
                 <h3><strong>date corresponding to date on Earth:</strong> ${rovers.data.data.latest_photos[0].earth_date}</h3> </div>
-                <img src="${rovers.data.data.latest_photos[0].img_src}" alt='Photo taken by'/>  
             </section>
+
+            <section class="imagesSection">
+                <div class="imageBox">
+                    <img class="image" src="${rovers.data.data.latest_photos[0].img_src}" alt='Photo taken by ${rovers.roverChosen} on Mars on ${rovers.data.data.latest_photos[0].earth_date}'/>  
+                    <p class="imageData">Camera: ${rovers.data.data.latest_photos[0].camera.full_name}</p> 
+                    <p class="imageData">Picture taken on ${rovers.data.data.latest_photos[0].earth_date}</p> 
+                    <p class="imageData">${rovers.data.data.latest_photos[0].sol}</p> 
+                </dic>
+            </section>
+
+            ${renderImagesArr(images)}
+            
         </main>
         <footer></footer>
     `)
@@ -47,9 +64,9 @@ const App = (state) => {
             <h1>Choose a Rover</h1>
                 <div id='roverDiv'>
                     <ul>
-                        <button onClick="pickRover('curiosity')",href=#>Curiosity</button>
-                        <button onClick="pickRover('opportunity')",href=#>Opportunity</button>
-                        <button onClick="pickRover('spirit')",href=#>Spirit</button>
+                        <button onClick="pickRover('Curiosity')",href=#>Curiosity</button>
+                        <button onClick="pickRover('Opportunity')",href=#>Opportunity</button>
+                        <button onClick="pickRover('Spirit')",href=#>Spirit</button>
                     </ul>
                 </div>
             </header>
@@ -80,6 +97,17 @@ function pickRover(string){
 
     return getInformationAboutRover(store);
 
+}
+
+function renderImagesArr(arr){
+
+    const imagesArr = arr.map((ele) => {
+        return (`<img src="${ele.img_src}"/>`)
+    });
+
+    console.log('imagesArr', imagesArr)
+    
+    return (`<div>${imagesArr}</div>`)
 }
 
 // Example of a pure function that renders infomation requested from the backend
@@ -115,13 +143,9 @@ function pickRover(string){
 
 // ------------------------------------------------------  API CALLS
 
-
-
-
-
 async function getInformationAboutRover(state){
 
-    const nameParam = state.roverChosen
+    const nameParam = state.roverChosen.toLowerCase()
 
     const res = await fetch(`http://localhost:3000/rovers/${nameParam}`)
 

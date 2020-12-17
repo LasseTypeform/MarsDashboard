@@ -35,17 +35,24 @@ main {
   padding: 20px;
 }
 
+/* Choose Rover Buttons */
 .roverDetails{
   display: inline-flex;
   background-color: lightslategray;
 }
 
+/* RoverInfoSection */
+.roverInfoSection{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
 /* Images */
-.imageContainer {
+.imagesSection {
   display: inline-flex;
   flex-wrap: wrap;
 }
-.imageData {
+.imageBox {
   display: flex;
   flex-direction: column;
 }

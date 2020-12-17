@@ -18,7 +18,7 @@ app.use('/', express.static(path.join(__dirname, '../public')))
 // Get information about Rover
 app.get('/rovers/:name', async (req, res) => {
 
-    let nameParam = req.params.name
+    let nameParam = req.params.name.toLowerCase()
 
     try {
         // let data = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/photos?earth_date=2018-12-12&api_key=${process.env.API_KEY}`)
