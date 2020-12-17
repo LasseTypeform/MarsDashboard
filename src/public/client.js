@@ -21,62 +21,32 @@ const render = async (root, state) => {
 // create content
 const App = (state) => {    
     let rovers  = state
-    console.log('state', state)
+    console.log('rovers', state)
     if(rovers.data !== '' && rovers.data.data.photos !== []) {
     
-    let images = rovers.data.data.latest_photos.map(ele => ele)
+   
 
     return (`
         <header>
-        <h1>Choose a Rover</h1>
-            <div id='roverDiv'>
-                <ul>
-                    <button onClick="pickRover('Curiosity')",href=#>Curiosity</button>
-                    <button onClick="pickRover('Opportunity')",href=#>Opportunity</button>
-                    <button onClick="pickRover('Spirit')",href=#>Spirit</button>
-                </ul>
-            </div>
+            ${headerSection()}
         </header>
         <main>
-            <section class="roverInfoSection">
-                <h2>Rover Name: ${rovers.roverChosen}</h2>
-                <h3>Launch Date: ${rovers.data.data.latest_photos[0].rover.launch_date}</h3>
-                <h3>Landing Date: ${rovers.data.data.latest_photos[0].rover.landing_date}</h3>
-                <h3><strong>date corresponding to date on Earth:</strong> ${rovers.data.data.latest_photos[0].earth_date}</h3> </div>
-            </section>
-
-            <section class="imagesSection">
-                <div class="imageBox">
-                    <img class="image" src="${rovers.data.data.latest_photos[0].img_src}" alt='Photo taken by ${rovers.roverChosen} on Mars on ${rovers.data.data.latest_photos[0].earth_date}'/>  
-                    <p class="imageData">Camera: ${rovers.data.data.latest_photos[0].camera.full_name}</p> 
-                    <p class="imageData">Picture taken on ${rovers.data.data.latest_photos[0].earth_date}</p> 
-                    <p class="imageData">${rovers.data.data.latest_photos[0].sol}</p> 
-                </dic>
-            </section>
-
-            ${renderImagesArr(images)}
+            ${renderRoverInfo(rovers)}
             
+            ${renderImages(rovers)}
         </main>
         <footer></footer>
     `)
     } else return (`
         <header>
-            <h1>Choose a Rover</h1>
-                <div id='roverDiv'>
-                    <ul>
-                        <button onClick="pickRover('Curiosity')",href=#>Curiosity</button>
-                        <button onClick="pickRover('Opportunity')",href=#>Opportunity</button>
-                        <button onClick="pickRover('Spirit')",href=#>Spirit</button>
-                    </ul>
-                </div>
-            </header>
-            <main>
-                <section>
-                <div class="roverDetails">
-                    <h3> No Data collected </h3>
-                </section>
-            </main>
-            <footer></footer>
+        ${headerSection()}
+        <main>
+            <section>
+            <div class="roverDetails">
+                <h3> No Data collected </h3>
+            </section>
+        </main>
+        <footer></footer>
     `)
 }
 
@@ -90,25 +60,63 @@ window.addEventListener('load', () => {
 function pickRover(string){
 
     let roverChosen = string 
-
     let pickedRover = { roverChosen }
-    console.log('pickedRover in BtnCall', pickedRover)
     updateStore(store, pickedRover)
 
     return getInformationAboutRover(store);
 
 }
 
-function renderImagesArr(arr){
+const headerSection = () =>{
 
-    const imagesArr = arr.map((ele) => {
-        return (`<img src="${ele.img_src}"/>`)
+    return (`    
+        <h1>Choose a Rover</h1>
+            <div id='roverDiv'>
+                <ul>
+                    <button onClick="pickRover('Curiosity')",href=#>Curiosity</button>
+                    <button onClick="pickRover('Opportunity')",href=#>Opportunity</button>
+                    <button onClick="pickRover('Spirit')",href=#>Spirit</button>
+                </ul>
+            </div>
+    `)
+}
+
+function renderRoverInfo(props){
+
+    let rovers = Object.assign(props)
+        return (`
+        <section class="roverInfoSection">
+        <h2>Rover Name: ${rovers.roverChosen}</h2>
+        <h3>Launch Date: ${rovers.data.data.latest_photos[0].rover.launch_date}</h3>
+        <h3>Landing Date: ${rovers.data.data.latest_photos[0].rover.landing_date}</h3>
+        <h3><strong>date corresponding to date on Earth:</strong> ${rovers.data.data.latest_photos[0].earth_date}</h3> </div>
+        </section>
+        `
+    )
+}
+
+
+function renderImages(props){
+
+    let images = props.data.data.latest_photos.map(ele => ele)
+
+    const imagesArr = images.map((ele) => {
+        return (`
+        <section class="imagesSection">
+        <div class="imageBox">
+        <img src="${ele.img_src}" alt='Photo taken by ${props.roverChosen} on Mars on ${props.data.data.latest_photos[0].earth_date}'/> 
+        <p class="imageData">Camera: ${ele.full_name}</p> 
+        <p class="imageData">Picture taken on ${ele.earth_date}</p> 
+        <p class="Sol">${ele.sol}</p> 
+        </div>
+        </section>
+        `)
     });
-
-    console.log('imagesArr', imagesArr)
     
     return (`<div>${imagesArr}</div>`)
 }
+
+
 
 // Example of a pure function that renders infomation requested from the backend
 // const ImageOfTheDay = (apod) => {
