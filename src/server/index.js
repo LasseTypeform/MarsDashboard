@@ -20,9 +20,19 @@ app.get('/rovers/:name', async (req, res) => {
 
     let nameParam = req.params.name.toLowerCase()
 
+    const earthDate = (nameParam) => {
+        if(nameParam === 'spirit') {
+            return '2010-01-21'
+        } else if(nameParam === 'opportunity') {
+            return '2018-02-11'
+        } else return '2020-10-16'
+    }
+    
+    console.log('datechosen', earthDate(nameParam))
+
     try {
         // let data = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/photos?earth_date=2018-12-12&api_key=${process.env.API_KEY}`)
-        let data = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/latest_photos?api_key=${process.env.API_KEY}`)
+        let data = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/photos?earth_date=${earthDate(nameParam)}&api_key=${process.env.API_KEY}`)
           .then(res => res.json())
           res.send({ data })
      

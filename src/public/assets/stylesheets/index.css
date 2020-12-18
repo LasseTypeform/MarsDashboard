@@ -5,6 +5,10 @@ body {
   flex-direction: column;
   font-family: Arial;
   min-height: 100vh;
+  background-image: URL('../images/andy-holmes-rCbdp8VCYhQ-unsplash.jpg');
+  background-size: cover;
+  font-size: 14px;
+  color: white;
 }
 
 /* Header section */
@@ -21,11 +25,12 @@ header {
   padding: 0;
 }
 
-#roverDiv ul li, #roverDiv ul li a {
+#roverDiv ul button {
   text-decoration: none;
   list-style: none;
-  margin: 0.5em;
-  color: black;
+  height: 18em;
+  width: 18em;
+  margin: 3em;
   background-color: lightgray;
 }
 
