@@ -4,41 +4,66 @@ body {
   display: flex;
   flex-direction: column;
   font-family: Arial;
-  min-height: 100vh;
-  background-image: URL('../images/andy-holmes-rCbdp8VCYhQ-unsplash.jpg');
-  background-size: cover;
+  min-height: 200vh;
+  background-image: URL("../images/andy-holmes-rCbdp8VCYhQ-unsplash.jpg");
   font-size: 14px;
   color: white;
 }
 
 /* Header section */
 header {
-  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
+#roverDiv, h1 {
+  margin-top: 5rem;
+}
 #roverDiv ul {
+  height: 100%;
   display: inline-flex;
   justify-content: space-around;
-  width: 100%;
-  padding: 0;
+  width: 95%;
 }
 
 #roverDiv ul button {
   text-decoration: none;
   list-style: none;
-  height: 18em;
-  width: 18em;
-  margin: 3em;
+  height: 340px;
+  width: 340px;
+  margin: 1rem;
+  color: white;
+  font-size: 4em;
+  text-shadow: 3px 3px gray;
   background-color: lightgray;
+  background-size: cover;
+  background-repeat: no-repeat;
+  box-shadow: 3px 4px 5px 5px lightgray;
+  transition: height width 1s;
+}
+
+#roverDiv ul button:hover {
+  height: 350px;
+  width: 350px;
+}
+
+#curiosity{
+  background-image: URL('../images/vitaliy-zamedyanskiy-InZ2V70i-Xk-unsplash.jpg');
+}
+#opportunity{
+  background-image: URL('../images/yue-liu-J_KPFhVdbbk-unsplash.jpg');
+}
+#spirit{
+  background-image: URL('../images/nicolas-lobos-NR_tXTuyTak-unsplash.jpg');
 }
 
 /* Main section */
-main {
+/* main {
   flex: 1;
   padding: 20px;
-}
+} */
 
 /* Choose Rover Buttons */
 .roverDetails{
@@ -54,22 +79,30 @@ main {
 }
 /* Images */
 .imagesSection {
-  display: inline-flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 8px;
+  justify-items: center;
 }
+
 .imageBox {
   display: flex;
   flex-direction: column;
+  max-height: 400px;
+  max-width: 400px; 
+  align-items: center;
 }
 .image{
   max-height: 400px;
+  max-width: 400px;
 }
 footer {
   /* footer styles */
 }
 
-/* -------------------  TABLET  --------------------- */
-@media (min-width: 768px) {
+/* -------------------  LARGE SCREENS  -------------- */
+
+@media (min-width: 1824px) {
   /* use mobile */
 }
 
@@ -79,8 +112,7 @@ footer {
   /* use mobile */
 }
 
-/* -------------------  LARGE SCREENS  -------------- */
-
-@media (min-width: 1824px) {
+/* -------------------  TABLET  --------------------- */
+@media (min-width: 768px) {
   /* use mobile */
 }

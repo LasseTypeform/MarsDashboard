@@ -28,7 +28,7 @@ app.get('/rovers/:name', async (req, res) => {
         } else return '2020-10-16'
     }
     
-    console.log('datechosen', earthDate(nameParam))
+
 
     try {
         // let data = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/photos?earth_date=2018-12-12&api_key=${process.env.API_KEY}`)

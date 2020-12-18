@@ -24,15 +24,18 @@ const App = (state) => {
     console.log('rovers', state)
     if(rovers.data !== '' && rovers.data.data.photos !== []) {
     
-   
-
     return (`
         <header>
             ${headerSection()}
         </header>
         <main>
+        <section class="roverInfoSection"> 
         ${renderRoverInfo(rovers)}
+        </section>
+
+        <section class="imagesSection">
         ${renderImages(rovers)}
+        </section>
         </main>
         <footer></footer>
     `)
@@ -41,8 +44,6 @@ const App = (state) => {
         ${headerSection()}
         <main>
             <section>
-            <div class="roverDetails">
-                <h3> No Data collected </h3>
             </section>
         </main>
         <footer>
@@ -56,7 +57,6 @@ window.addEventListener('load', () => {
 })
 
 // ------------------------------------------------------  COMPONENTS
-
 function pickRover(string){
 
     let roverChosen = string 
@@ -67,56 +67,46 @@ function pickRover(string){
 
 }
 
-
 const headerSection = () =>{
 
     return (`    
         <h1>Choose a Rover</h1>
             <div id='roverDiv'>
                 <ul>
-                    <button id="curiosity" onClick="pickRover('Curiosity')",href=#>Curiosity</button>
-                    <button id="opportunity" onClick="pickRover('Opportunity')",href=#>Opportunity</button>
-                    <button id="spirit" onClick="pickRover('Spirit')",href=#>Spirit</button>
+                    <button id="curiosity" onClick="pickRover('Curiosity')">Curiosity</button>
+                    <button id="opportunity" onClick="pickRover('Opportunity')">Opportunity</button>
+                    <button id="spirit" onClick="pickRover('Spirit')">Spirit</button>
                 </ul>
             </div>
     `)
 }
 
-function renderRoverInfo(props){
+const renderRoverInfo = (props) =>{
 
     let rovers = Object.assign(props)
         return (`
-        <section class="roverInfoSection">
+        <div>
         <h2>Rover Name: ${rovers.roverChosen}</h2>
         <h3>Launch Date: ${rovers.data.data.photos[0].rover.launch_date}</h3>
         <h3>Landing Date: ${rovers.data.data.photos[0].rover.landing_date}</h3>
-        <h3><strong>date corresponding to date on Earth:</strong> ${rovers.data.data.photos[0].earth_date}</h3> </div>
-        </section>
-        `
-    )
+        <h3><strong>date corresponding to date on Earth:</strong> ${rovers.data.data.photos[0].earth_date}</h3> 
+        </div>
+        `)
 }
 
 
-function renderImages(props){
+const renderImages = (props) =>{
 
     let images = props.data.data.photos.map(ele => ele)
 
-    const imagesArr = images.map((ele) => {
-        return (`
-        <section class="imagesSection">
-        <div class="imageBox">
-        <img src="${ele.img_src}" alt='Photo taken by ${props.roverChosen} on Mars on ${props.data.data.photos[0].earth_date}'/> 
-        <p class="imageData">Camera: ${ele.full_name}</p> 
-        <p class="imageData">Picture taken on ${ele.earth_date}</p> 
-        <p class="Sol">${ele.sol}</p> 
-        </div>
-        </section>
-        `)
-    });
-    
-    return (`<div>${imagesArr}</div>`)
-}
+    const imagesArr = images.map((ele) => 
+    `<div class="imageBox"><img class="image" src="${ele.img_src}" alt="Photo taken by ${props.roverChosen} on Mars on ${props.data.data.photos[0].earth_date}"/><p class="imageData">Camera: ${ele.full_name}</p><p class="imageData">Picture taken on ${ele.earth_date}</p><p class="Sol">${ele.sol}</p></div>`
+    ).join(' ')
 
+
+
+    return imagesArr
+}
 
 
 // Example of a pure function that renders infomation requested from the backend
@@ -165,7 +155,7 @@ async function getInformationAboutRover(state){
    updateStore(store, temp)     
 }
 
-// console.log('store after call', store);
+console.log('store after call', store);
 
 
 
