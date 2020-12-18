@@ -89,7 +89,7 @@ const renderRoverInfo = (props) =>{
         <h2>Rover Name: ${rovers.roverChosen}</h2>
         <h3>Launch Date: ${rovers.data.data.photos[0].rover.launch_date}</h3>
         <h3>Landing Date: ${rovers.data.data.photos[0].rover.landing_date}</h3>
-        <h3><strong>date corresponding to date on Earth:</strong> ${rovers.data.data.photos[0].earth_date}</h3> 
+        <h3><strong>Date corresponding to date on Earth:</strong> ${rovers.data.data.photos[0].earth_date}</h3> 
         </div>
         `)
 }
@@ -100,10 +100,8 @@ const renderImages = (props) =>{
     let images = props.data.data.photos.map(ele => ele)
 
     const imagesArr = images.map((ele) => 
-    `<div class="imageBox"><img class="image" src="${ele.img_src}" alt="Photo taken by ${props.roverChosen} on Mars on ${props.data.data.photos[0].earth_date}"/><p class="imageData">Camera: ${ele.full_name}</p><p class="imageData">Picture taken on ${ele.earth_date}</p><p class="Sol">${ele.sol}</p></div>`
+    `<div class="imageBox"><img class="image" src="${ele.img_src}" alt="Photo taken by ${props.roverChosen} on Mars on ${props.data.data.photos[0].earth_date}"/><p class="imageData">Camera: ${ele.camera.full_name}</p><p class="imageData">Picture taken on ${ele.earth_date}</p> <p>Sol: ${ele.sol}</p></div>`
     ).join(' ')
-
-
 
     return imagesArr
 }
@@ -149,13 +147,12 @@ async function getInformationAboutRover(state){
     const res = await fetch(`http://localhost:3000/rovers/${nameParam}`)
 
     const data = await res.json()
-    console.log('data in call', data);
+
     let temp = { data }
 
    updateStore(store, temp)     
 }
 
-console.log('store after call', store);
 
 
 
