@@ -21,17 +21,19 @@ header {
 
 #roverDiv {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
 }
 
 #roverDiv, h1 {
   margin-top: 5rem;
+  padding-left: 5px;
+  padding-right: 5px;
 }
 #roverDiv ul {
   height: 100%;
   display: inline-flex;
   justify-content: space-around;
-  width: 95%;
+  width: 100%;
   padding-inline-start: 0;
 }
 
@@ -67,17 +69,17 @@ header {
 }
 
 /* Choose Rover Buttons */
-.roverDetails{
-  display: inline-flex;
-  background-color: lightslategray;
-}
-
 /* RoverInfoSection */
 .roverInfoSection{
   display: flex;
   flex-direction: column;
   align-items: center;
 }
+
+.roverDetails{
+  text-align: left;
+}
+
 /* Images */
 .imagesSection {
   display: grid;
@@ -90,15 +92,25 @@ header {
   display: flex;
   flex-direction: column;
   align-items: center;
+  max-width: 100%;
 }
 .image{
   max-height: 370px;
   max-width: 370px;
+  
 }
 footer {
-  /* footer styles */
-  height: 2rem;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
   background-color: lightgray;
+  color: white;
+  text-align: center;
+  color: black;
+}
+footer p {
+  padding: 0 5px;
 }
 
 /*        Media Rules        */
@@ -109,11 +121,14 @@ footer {
 
 /* -------------------  DESKTOP  -------------------- */
 
+
+/* max-width: 1224px */
 @media (max-width: 1224px) {
 
   #roverDiv ul button {
     height: 290px;
     width: 290px;
+    font-size: 2.7em;
   }
 
   #roverDiv ul button:hover {
@@ -127,7 +142,96 @@ footer {
   }
 }
 
+/* -------------------  Smaller DESKTOP  -------------------- */
+
+/* max-width: 990px */
+@media (max-width: 990px) {
+  #roverDiv ul button {
+    height: 220px;
+    width: 220px;
+    font-size: 2.5em;
+  }
+
+  #roverDiv ul button:hover {
+    height: 230px;
+    width: 230px;
+  }
+
+}
+
 /* -------------------  TABLET  --------------------- */
-@media (min-width: 768px) {
-  /* use mobile */
+@media (max-width: 768px) {
+  #roverDiv ul button {
+    height: 200px;
+    width: 200px;
+  }
+
+  #roverDiv ul button:hover {
+    height: 210px;
+    width: 210px;
+  }
+
+  .imagesSection {
+    grid-template-columns: 1fr;
+
+  }
+}
+
+/* -------------------  Mobile  --------------------- */
+
+/* Mobile max-width: 685px */
+@media (max-width: 685px) {
+  #roverDiv ul button {
+    height: 150px;
+    width: 150px;
+    font-size: 2em;
+  }
+
+  #roverDiv ul button:hover {
+    height: 160px;
+    width: 160px;
+  }
+}
+
+/* Mobile max-width: 685px */
+@media (max-width: 685px) {
+  #roverDiv ul button {
+    height: 130px;
+    width: 130px;
+    font-size: 1.6em;
+  }
+
+  #roverDiv ul button:hover {
+    height: 140px;
+    width: 140px;
+  }
+}
+
+/* Mobile max-width: 500px */
+@media (max-width: 500px) {
+
+  h1 {
+    margin-top: 1rem;
+  }
+  .roverDetails{
+    padding: 2%;
+  }
+
+  #roverDiv{
+    margin-top: 0%;
+  }
+  #roverDiv ul{
+    flex-direction: column;
+  }
+  .imageBox {
+    padding: 2%;
+  }
+  .image{
+    max-height: 350px;
+    max-width: 350px;
+    
+  }
+  .imageBox p {
+    max-width: 350px;
+  }
 }

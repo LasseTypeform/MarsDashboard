@@ -28,7 +28,7 @@ const App = (state) => {
         <header>
             ${headerSection()}
         </header>
-        <main>
+       
         <section class="roverInfoSection"> 
         ${renderRoverInfo(rovers)}
         </section>
@@ -36,17 +36,21 @@ const App = (state) => {
         <section class="imagesSection">
         ${renderImages(rovers)}
         </section>
-        </main>
-        <footer></footer>
+   
+        <footer>
+            <p>Created by Lasse Mollerup * Rover image-credit to NASA * Button image-background credit to Vitaliy Zamedyanskiy, Yue-Liu and Nicolas Lobos</p>
+        </footer>
     `)
     } else return (`
         <header>
         ${headerSection()}
-        <main>
+        </header>
+       
             <section>
             </section>
-        </main>
+   
         <footer>
+            <p>Created by Lasse Mollerup * Rover image-credit to NASA * Button image-background credit to Vitaliy Zamedyanskiy, Yue-Liu and Nicolas Lobos</p>
         </footer>
     `)
 }
@@ -85,7 +89,7 @@ const renderRoverInfo = (props) =>{
 
     let rovers = Object.assign(props)
         return (`
-        <div>
+        <div class="roverDetails">
         <h2>Rover Name: ${rovers.roverChosen}</h2>
         <h3>Launch Date: ${rovers.data.data.photos[0].rover.launch_date}</h3>
         <h3>Landing Date: ${rovers.data.data.photos[0].rover.landing_date}</h3>
