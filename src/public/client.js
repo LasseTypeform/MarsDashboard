@@ -2,6 +2,7 @@
 let store = {
     roverChosen: '',
     data: '',
+    imageDate: '',
     rovers: Immutable.List(['Curiosity', 'Opportunity', 'Spirit'])
 }
 
@@ -58,8 +59,6 @@ const App = (state) => {
     `)
 }
 
-
-
 // ------------------------------------------------------  COMPONENTS
 
 // Componenent to update the Global state
@@ -99,25 +98,50 @@ const headerSection = () =>{
 // The HTML that will be rendered in the roverInfoSection with data from the state 
 const renderRoverInfo = (props) =>{
 
-    let rovers = Object.assign(props)
+    const rovers = Object.assign(props)
 
-        return (`
+    
+
+    
+    if(store.imageDate !== ''){  
+
+        const roverStatus = rovers.data.data.photos[0].rover.status === "complete" ? "No longer active" : "Active";
+    
+
+    return (`
         <div class="roverDetails">
         <h2>Rover Name: ${rovers.roverChosen}</h2>
         <h3>Launch Date: ${rovers.data.data.photos[0].rover.launch_date}</h3>
         <h3>Landing Date: ${rovers.data.data.photos[0].rover.landing_date}</h3>
+        <h3>Rover Operational Status: ${roverStatus}</h3>
         <h3><strong>Date corresponding to date on Earth:</strong> ${rovers.data.data.photos[0].earth_date}</h3> 
         </div>
         `)
+    } 
+    
+    // else {
+    //     const roverStatus = rovers.data.data.latest_photos[0].rover.status === "complete" ? "No longer active" : "Active";
+        
+    //     return (`
+    // <div class="roverDetails">
+    // <h2>Rover Name: ${rovers.roverChosen}</h2>
+    // <h3>Launch Date: ${rovers.data.data.latest_photos[0].rover.launch_date}</h3>
+    // <h3>Landing Date: ${rovers.data.data.latest_photos[0].rover.landing_date}</h3>
+    // <h3>Rover Operational Status: ${roverStatus}</h3>
+    // <h3><strong>Date corresponding to date on Earth:</strong> ${rovers.data.data.latest_photos[0].earth_date}</h3> 
+    // </div>
+    // `)
+    // }
+    
 }
 
 // The HTML that will be rendered in the imagesSection with images and image data from the state 
 const renderImages = (props) =>{
 
-    const images = props.data.data.photos.map(ele => ele)
+    const images = props.data.data.latest_photos.map(ele => ele)
 
     const imagesArr = images.map((ele) => 
-    `<div class="imageBox"><img class="image" src="${ele.img_src}" alt="Photo taken by ${props.roverChosen} on Mars on ${props.data.data.photos[0].earth_date}"/><p class="imageData">Camera: ${ele.camera.full_name}</p><p class="imageData">Picture taken on ${ele.earth_date}</p> <p>Sol: ${ele.sol}</p></div>`
+    `<div class="imageBox"><img class="image" src="${ele.img_src}" alt="Photo taken by ${props.roverChosen} on Mars on ${props.data.data.latest_photos[0].earth_date}"/><p class="imageData">Camera: ${ele.camera.full_name}</p><p class="imageData">Picture taken on ${ele.earth_date}</p> <p>Sol: ${ele.sol}</p></div>`
     ).join(' ')
 
     return imagesArr
@@ -129,15 +153,32 @@ async function getInformationAboutRover(state){
 
     const nameParam = state.roverChosen.toLowerCase()
 
-    const res = await fetch(`http://localhost:3000/rovers/${nameParam}`)
+    console.log('state before call', state)
 
+    const res = await fetch(`http://localhost:3000/rovers?name=${nameParam}&date=${state.imageDate}`)
+    console.log('res', res)
     const data = await res.json()
 
-    let temp = { data }
+    console.log('data after call', data);
 
+    if(Object.keys(data.data) == 'latest_photos') {
+        
+        Object.defineProperty(data.data, 'photos', Object.getOwnPropertyDescriptor(data.data, "latest_photos"));
+        delete Object.keys(data.data);
+    }
+   
+    let temp = { data }
+    console.log('temp', temp);
    updateStore(store, temp)     
+
+//    console.log('store', store)
 }
 
 
 
 
+//  Spirit '2010-01-21'
+
+// Opp '2018-12-12'
+
+//  Curiosity '2020-10-16'
