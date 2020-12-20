@@ -18,50 +18,35 @@ app.use('/', express.static(path.join(__dirname, '../public')))
 // Get information about Rover
 app.get('/rovers', async (req, res) => {
 
-    console.log('req.params', req.query)
-
-    const nameParam  = Object.assign(req.query.name)
-
-    // const URLdependingOnDate = (req, nameParam) => {
     
-    //     if(req.query.date !== ''){
+    console.log('req.params', req.query)
+    
+    const URLdependingOnDate = (req) => {
+        
+        const nameParam  = Object.assign(req.query.name.toLowerCase())
+    
 
-    //         if(nameParam === 'spirit') {
-    //             return `https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/photos?earth_date=${req.query.date}&api_key=${process.env.API_KEY}`
-    //         } else if(nameParam === 'opportunity'){
-    //         return `https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/photos?earth_date=${req.query.date}&api_key=${process.env.API_KEY}`
-    //         } else {
-    //         return `https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/photos?earth_date=${req.query.date}&api_key=${process.env.API_KEY}`
-    //     } 
-    //     }
-    //     else {return `https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/latest_photos?api_key=${process.env.API_KEY}`}
-                      
-
-    // }
-
+        if(req.query.date !== '' && nameParam !== 'curiosity'){
+     
+            if(nameParam === 'spirit') {
+                return `https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/photos?earth_date=${req.query.date}&api_key=${process.env.API_KEY}`
+            } 
+            else {
+                return `https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/photos?earth_date=${req.query.date}&api_key=${process.env.API_KEY}`
+                } 
+        }
+        else return `https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/latest_photos?api_key=${process.env.API_KEY}`
+    }
+  
     try {
-        // let data = await fetch()
-        // let data = await fetch("${URLdependingOnDate(${req})}")
-        let data = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/latest_photos?api_key=${process.env.API_KEY}`)
+        let data = await fetch(URLdependingOnDate(req))
           .then(res => res.json())
           res.send({ data })
      
     } catch (err) {
         console.log('error:', err);
     }
-    // try {
-    //     // let data = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/photos?earth_date=2018-12-12&api_key=${process.env.API_KEY}`)
-    //     let data = await fetch(`https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/photos?earth_date=${earthDate(nameParam)}&api_key=${process.env.API_KEY}`)
-    //       .then(res => res.json())
-    //       res.send({ data })
-     
-    // } catch (err) {
-    //     console.log('error:', err);
-    // }
-
 })
-
-
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
