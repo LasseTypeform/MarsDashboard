@@ -1,4 +1,4 @@
-
+// Global State of the page
 let store = {
     roverChosen: '',
     data: '',
@@ -6,24 +6,28 @@ let store = {
 }
 
 
-// add our markup to the page
+// Adding markup to the page
 const root = document.getElementById('root')
 
-const updateStore = (store, newState) => {
-    store = Object.assign(store, newState)
-    render(root, store)
-}
-
+// Rendering the content in the root of the HTML, with the data of the Global State
 const render = async (root, state) => {
     root.innerHTML = App(state)
 }
 
-// create content
+
+// listening for load event because page should load before any JS is called
+window.addEventListener('load', () => {
+    render(root, store)
+})
+
+// Content included in the App that will be rendered
 const App = (state) => {    
-    let rovers  = state
-    console.log('rovers', state)
+
+    const rovers  = Object.assign(state)
+
+    // Checking to  see if data has been passed to the state
     if(rovers.data !== '' && rovers.data.data.photos !== []) {
-    
+    // If state has been updated with data from the API, the render the following.
     return (`
         <header>
             ${headerSection()}
@@ -41,53 +45,62 @@ const App = (state) => {
             <p>Created by Lasse Mollerup * Rover image-credit to NASA * Button image-background credit to Vitaliy Zamedyanskiy, Yue-Liu and Nicolas Lobos</p>
         </footer>
     `)
-    } else return (`
+    } 
+    // If no data has been added to the Global state then only render the Header with the rover buttons and the the footer.
+    else return (`
         <header>
         ${headerSection()}
         </header>
        
-            <section>
-            </section>
-   
         <footer>
             <p>Created by Lasse Mollerup * Rover image-credit to NASA * Button image-background credit to Vitaliy Zamedyanskiy, Yue-Liu and Nicolas Lobos</p>
         </footer>
     `)
 }
 
-// listening for load event because page should load before any JS is called
-window.addEventListener('load', () => {
-    render(root, store)
-})
+
 
 // ------------------------------------------------------  COMPONENTS
-function pickRover(string){
 
-    let roverChosen = string 
-    let pickedRover = { roverChosen }
-    updateStore(store, pickedRover)
+// Componenent to update the Global state
+const updateStore = (store, newState) => {
+    store = Object.assign(store, newState)
+    render(root, store)
+}
 
-    return getInformationAboutRover(store);
+// Conponent reffering to onClick call on the Rover buttons
+function pickRover(string, state){
+
+    const roverChosen = string 
+    const pickedRover = { roverChosen }
+
+    // Updating the Global State with the name of the rover chosen
+    updateStore(state, pickedRover)
+
+    // Initiating the API-call-function to get information from the server using the updated state
+    return getInformationAboutRover(state);
 
 }
 
+// The HTML that will be rendered in the headerSection
 const headerSection = () =>{
-
     return (`    
         <h1>Choose a Rover</h1>
             <div id='roverDiv'>
                 <ul>
-                    <button id="curiosity" onClick="pickRover('Curiosity')">Curiosity</button>
-                    <button id="opportunity" onClick="pickRover('Opportunity')">Opportunity</button>
-                    <button id="spirit" onClick="pickRover('Spirit')">Spirit</button>
+                    <button id="curiosity" onClick="pickRover('Curiosity', store)">Curiosity</button>
+                    <button id="opportunity" onClick="pickRover('Opportunity', store)">Opportunity</button>
+                    <button id="spirit" onClick="pickRover('Spirit', store)">Spirit</button>
                 </ul>
             </div>
     `)
 }
 
+// The HTML that will be rendered in the roverInfoSection with data from the state 
 const renderRoverInfo = (props) =>{
 
     let rovers = Object.assign(props)
+
         return (`
         <div class="roverDetails">
         <h2>Rover Name: ${rovers.roverChosen}</h2>
@@ -98,10 +111,10 @@ const renderRoverInfo = (props) =>{
         `)
 }
 
-
+// The HTML that will be rendered in the imagesSection with images and image data from the state 
 const renderImages = (props) =>{
 
-    let images = props.data.data.photos.map(ele => ele)
+    const images = props.data.data.photos.map(ele => ele)
 
     const imagesArr = images.map((ele) => 
     `<div class="imageBox"><img class="image" src="${ele.img_src}" alt="Photo taken by ${props.roverChosen} on Mars on ${props.data.data.photos[0].earth_date}"/><p class="imageData">Camera: ${ele.camera.full_name}</p><p class="imageData">Picture taken on ${ele.earth_date}</p> <p>Sol: ${ele.sol}</p></div>`
@@ -109,38 +122,6 @@ const renderImages = (props) =>{
 
     return imagesArr
 }
-
-
-// Example of a pure function that renders infomation requested from the backend
-// const ImageOfTheDay = (apod) => {
-
-   
-    // If image does not already exist, or it is not from today -- request it again
-    // const today = new Date()
-    // const photodate = new Date(apod.date)
-    // console.log(photodate.getDate(), today.getDate());
-
-    // console.log(photodate.getDate() === today.getDate());
-    // if (!apod || apod.image.date === today.getDate() ) {
-    //     getImageOfTheDay(store)
-    // }
-   
-    // check if the photo of the day is actually type video!
-    // if (apod.image.media_type === "video") {
-    //     return (`
-    //         <p>See today's featured video <a href="${apod.image.url}">here</a></p>
-    //         <p>${apod.image.title}</p>
-    //         <p>${apod.image.explanation}</p>
-    //     `)
-    // } else {
-    //     return (`
-    //         <img src="${apod.image.url}" height="350px" width="100%" />
-    //         <p>${apod.image.explanation}</p>
-    //     `)
-    // }
-//     getImageOfTheDay(store)
-    
-// }
 
 // ------------------------------------------------------  API CALLS
 

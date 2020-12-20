@@ -11,7 +11,10 @@ body {
   margin: 0;
 }
 
+/* =============== */
 /* Header section */
+/* =============== */
+
 header {
   height: 100%;
   display: flex;
@@ -19,6 +22,13 @@ header {
   align-items: center;
 }
 
+
+/* =============== */
+/* Choose Rover Buttons */
+/* =============== */
+
+
+/* Divs containing the Rover Buttons */
 #roverDiv {
   display: flex;
   justify-content: space-evenly;
@@ -52,12 +62,11 @@ header {
   box-shadow: 3px 4px 5px 5px lightgray;
   transition: height width 1s;
 }
-
 #roverDiv ul button:hover {
   height: 350px;
   width: 350px;
 }
-
+/* Adding background-images to the buttons with free images from https://unsplash.com/ credits stated in the footer of the page */
 #curiosity{
   background-image: URL('../images/vitaliy-zamedyanskiy-InZ2V70i-Xk-unsplash.jpg');
 }
@@ -68,8 +77,11 @@ header {
   background-image: URL('../images/nicolas-lobos-NR_tXTuyTak-unsplash.jpg');
 }
 
-/* Choose Rover Buttons */
-/* RoverInfoSection */
+
+/* =============== */
+/* RoverInfoSection containing the data about the rover chosen */
+/* =============== */
+
 .roverInfoSection{
   display: flex;
   flex-direction: column;
@@ -80,7 +92,10 @@ header {
   text-align: left;
 }
 
-/* Images */
+/* =============== */
+/* ImagesSection */
+/* =============== */
+
 .imagesSection {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -95,10 +110,16 @@ header {
   max-width: 100%;
 }
 .image{
+  min-height: 220px;
+  min-width: 220px;
   max-height: 370px;
   max-width: 370px;
   
 }
+
+/* =============== */
+/* Footer */
+/* =============== */
 footer {
   position: fixed;
   left: 0;
@@ -113,7 +134,7 @@ footer p {
   padding: 0 5px;
 }
 
-/*        Media Rules        */
+/* ============== MEDIA RULES ============== */
 
 /* -------------------  LARGE SCREENS  -------------- */
 
@@ -160,6 +181,8 @@ footer p {
 }
 
 /* -------------------  TABLET  --------------------- */
+
+/* max-width: 768px */
 @media (max-width: 768px) {
   #roverDiv ul button {
     height: 200px;
@@ -227,11 +250,11 @@ footer p {
     padding: 2%;
   }
   .image{
-    max-height: 350px;
-    max-width: 350px;
+    max-height: 330px;
+    max-width: 330px;
     
   }
   .imageBox p {
-    max-width: 350px;
+    max-width: 330px;
   }
 }
