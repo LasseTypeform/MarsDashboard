@@ -43,7 +43,7 @@ const App = (state) => {
 
             <section class="imagesSection">
             ${renderImages(rovers)}
-            <Button>See more images from this Rover</button>
+            <Button #seeMoreImagesBtn onClick="seeMoreImages(store)">See more images from this Rover</button>
             </section>
     
             <footer>
@@ -61,7 +61,6 @@ const App = (state) => {
 
             <section class="imagesSection">
             ${renderImages(rovers)}
-            <Button>See more images from this Rover</button>
             </section>
 
             <footer>
@@ -97,6 +96,21 @@ function pickRover(string, state){
 
     // Updating the Global State with the name of the rover chosen
     updateStore(state, pickedRover)
+    console.log('state in PickRover', state)
+    // Initiating the API-call-function to get information from the server using the updated state
+    return getInformationAboutRover(state);
+
+}
+
+// Conponent reffering to onClick call on the seeMoreImagesBtn button
+function seeMoreImages(state){
+    
+    const imageDate = (state.roverChosen === 'Spirit') ? '2010-01-21' : '2018-02-11'
+
+    const datePicked = { imageDate }
+
+    // Updating the Global State with the name of the rover chosen
+    updateStore(state, datePicked)
 
     // Initiating the API-call-function to get information from the server using the updated state
     return getInformationAboutRover(state);
@@ -124,14 +138,14 @@ const renderRoverInfo = (props) =>{
 
     if(store.imageDate !== ''){  
 
-    const roverStatus = rovers.data.data.photos[0].rover.status === "complete" ? "No longer active" : "Active";
+    // const roverStatus = rovers.data.data.photos[0].rover.status === "complete" ? "No longer active" : "Active";
+    // <h3>Rover Operational Status: ${roverStatus}</h3>
     
     return (`
         <div class="roverDetails">
         <h2>Rover Name: ${rovers.roverChosen}</h2>
         <h3>Launch Date: ${rovers.data.data.photos[0].rover.launch_date}</h3>
         <h3>Landing Date: ${rovers.data.data.photos[0].rover.landing_date}</h3>
-        <h3>Rover Operational Status: ${roverStatus}</h3>
         <h3><strong>Date corresponding to date on Earth:</strong> ${rovers.data.data.photos[0].earth_date}</h3> 
         </div>
         `)
