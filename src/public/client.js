@@ -27,7 +27,7 @@ const App = (state) => {
     const rovers  = Object.assign(state)
 
     // Checking to  see if data has been passed to the state
-    if(rovers.data !== '' && rovers.data.data.photos !== []) {
+    if(rovers.data !== '' && rovers.data.photos !== []) {
     // If state has been updated with data from the API, the render the following.
 
         if(rovers.roverChosen !== 'curiosity' && rovers.imageDate === '') {
@@ -96,7 +96,7 @@ function pickRover(string, state){
 
     // Updating the Global State with the name of the rover chosen
     updateStore(state, pickedRover)
-    console.log('state in PickRover', state)
+ 
     // Initiating the API-call-function to get information from the server using the updated state
     return getInformationAboutRover(state);
 
@@ -104,14 +104,14 @@ function pickRover(string, state){
 
 // Conponent reffering to onClick call on the seeMoreImagesBtn button
 function seeMoreImages(state){
-    
+
     const imageDate = (state.roverChosen === 'Spirit') ? '2010-01-21' : '2018-02-11'
 
     const datePicked = { imageDate }
-
+    
     // Updating the Global State with the name of the rover chosen
     updateStore(state, datePicked)
-
+  
     // Initiating the API-call-function to get information from the server using the updated state
     return getInformationAboutRover(state);
 
@@ -119,6 +119,7 @@ function seeMoreImages(state){
 
 // The HTML that will be rendered in the headerSection
 const headerSection = () =>{
+
     return (`    
         <h1>Choose a Rover</h1>
             <div id='roverDiv'>
@@ -136,59 +137,63 @@ const renderRoverInfo = (props) =>{
 
     const rovers = Object.assign(props)
 
-    if(store.imageDate !== ''){  
-
-    // const roverStatus = rovers.data.data.photos[0].rover.status === "complete" ? "No longer active" : "Active";
-    // <h3>Rover Operational Status: ${roverStatus}</h3>
-    
     return (`
         <div class="roverDetails">
         <h2>Rover Name: ${rovers.roverChosen}</h2>
-        <h3>Launch Date: ${rovers.data.data.photos[0].rover.launch_date}</h3>
-        <h3>Landing Date: ${rovers.data.data.photos[0].rover.landing_date}</h3>
-        <h3><strong>Date corresponding to date on Earth:</strong> ${rovers.data.data.photos[0].earth_date}</h3> 
+        <h3>Launch Date: ${rovers.data.photos[0].rover.launch_date}</h3>
+        <h3>Landing Date: ${rovers.data.photos[0].rover.landing_date}</h3>
+        <h3><strong>Date corresponding to date on Earth:</strong> ${rovers.data.photos[0].earth_date}</h3> 
         </div>
         `)
-    } 
+    
     
 }
 
 // The HTML that will be rendered in the imagesSection with images and image data from the state 
 const renderImages = (props) =>{
 
-    const images = props.data.data.photos.map(ele => ele)
+    const images = props.data.photos.map(ele => ele)
 
     const imagesArr = images.map((ele) => 
-    `<div class="imageBox"><img class="image" src="${ele.img_src}" alt="Photo taken by ${props.roverChosen} on Mars on ${props.data.data.photos[0].earth_date}"/><p class="imageData">Camera: ${ele.camera.full_name}</p><p class="imageData">Picture taken on ${ele.earth_date}</p> <p>Sol: ${ele.sol}</p></div>`
+    `<div class="imageBox"><img class="image" src="${ele.img_src}" alt="Photo taken by ${props.roverChosen} on Mars on ${props.data.photos[0].earth_date}"/><p class="imageData">Camera: ${ele.camera.full_name}</p><p class="imageData">Picture taken on ${ele.earth_date}</p> <p>Sol: ${ele.sol}</p></div>`
     ).join(' ')
 
     return imagesArr
 }
 
-// ------------------------------------------------------  API CALLS
+// ------------------------------------------------------  API CALL functions 
 
-async function getInformationAboutRover(state){
+
+async function apiCaller(state){
 
     const nameParam = state.roverChosen
 
-    console.log('state before call', state)
-
     const res = await fetch(`http://localhost:3000/rovers?name=${nameParam}&date=${state.imageDate}`)
-    console.log('res', res)
+
     const data = await res.json()
 
-    console.log('data after call', data);
+    let temp = Object.assign(checkData(data))
+    
+    return temp
+}
 
-    if(Object.keys(data.data) == 'latest_photos') {
+function checkData(data){
+
+    const dataToCheck = Object.assign(data)
+
+    if(Object.keys(dataToCheck.data) == 'latest_photos') {
         
         Object.defineProperty(data.data, 'photos', Object.getOwnPropertyDescriptor(data.data, "latest_photos"));
         delete Object.keys(data.data);
-    }
-   
-    let temp = { data }
-    console.log('temp', temp);
-   updateStore(store, temp)     
+        return dataToCheck
+    } 
+    else return dataToCheck
 
-//    console.log('store', store)
 }
 
+async function getInformationAboutRover(state){
+
+   const dataFrom_apiCaller = await Object.assign(apiCaller(state))
+  
+   updateStore(store, dataFrom_apiCaller)     
+}

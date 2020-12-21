@@ -17,31 +17,29 @@ app.use('/', express.static(path.join(__dirname, '../public')))
 
 // Get information about Rover
 app.get('/rovers', async (req, res) => {
-
-    
-    console.log('req.params', req.query)
     
     const URLdependingOnDate = (req) => {
         
         const nameParam  = Object.assign(req.query.name.toLowerCase())
     
 
-        if(req.query.date !== '' && nameParam !== 'curiosity'){
-     
-            if(nameParam === 'spirit') {
-                return `https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/photos?earth_date=${req.query.date}&api_key=${process.env.API_KEY}`
+        if((req.query.date !== '') && (nameParam != 'curiosity')){
+       
+            if(nameParam !== 'curiosity') {
+                return `https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/photos?earth_date=2010-01-21&api_key=${process.env.API_KEY}`
             } 
-            else {
-                return `https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/photos?earth_date=${req.query.date}&api_key=${process.env.API_KEY}`
-                } 
+           
         }
         else return `https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/latest_photos?api_key=${process.env.API_KEY}`
     }
-  
+
     try {
         let data = await fetch(URLdependingOnDate(req))
-          .then(res => res.json())
+          .then(res => 
+              res.json()
+              )
           res.send({ data })
+      
      
     } catch (err) {
         console.log('error:', err);
