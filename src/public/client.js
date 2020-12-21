@@ -30,6 +30,7 @@ const App = (state) => {
     if(rovers.data !== '' && rovers.data.photos !== []) {
     // If state has been updated with data from the API, the render the following.
 
+        // If the roverChosen is not curiosity and imageDate is still '' 
         if(rovers.roverChosen !== 'curiosity' && rovers.imageDate === '') {
 
             return (`
@@ -50,7 +51,9 @@ const App = (state) => {
                 <p>Created by Lasse Mollerup * Rover image-credit to NASA * Button image-background credit to Vitaliy Zamedyanskiy, Yue-Liu and Nicolas Lobos</p>
             </footer>
             `)
-        } else {  return (`
+        } 
+        // Otherwise return the following view for all the rovers
+        else {  return (`
             <header>
                 ${headerSection()}
             </header>
@@ -139,14 +142,12 @@ const renderRoverInfo = (props) =>{
 
     return (`
         <div class="roverDetails">
-        <h2>Rover Name: ${rovers.roverChosen}</h2>
-        <h3>Launch Date: ${rovers.data.photos[0].rover.launch_date}</h3>
-        <h3>Landing Date: ${rovers.data.photos[0].rover.landing_date}</h3>
-        <h3><strong>Date corresponding to date on Earth:</strong> ${rovers.data.photos[0].earth_date}</h3> 
+            <h2>Rover Name: ${rovers.roverChosen}</h2>
+            <h3>Launch Date: ${rovers.data.photos[0].rover.launch_date}</h3>
+            <h3>Landing Date: ${rovers.data.photos[0].rover.landing_date}</h3>
+            <h3><strong>Date corresponding to date on Earth:</strong> ${rovers.data.photos[0].earth_date}</h3> 
         </div>
-        `)
-    
-    
+        `) 
 }
 
 // The HTML that will be rendered in the imagesSection with images and image data from the state 
@@ -163,24 +164,37 @@ const renderImages = (props) =>{
 
 // ------------------------------------------------------  API CALL functions 
 
-
+// async function to call from the client to the server (index.js)
 async function apiCaller(state){
 
+    // checking which rover has been chosen
     const nameParam = state.roverChosen
 
+    // calling the server (index.js) with the chosen rover and imageDates value as params.
     const res = await fetch(`http://localhost:3000/rovers?name=${nameParam}&date=${state.imageDate}`)
 
     const data = await res.json()
 
+    // Once the reponse has been received from the server (index.js) run the following function 
+    // to make sure the state.data.photos is not []
     let temp = Object.assign(checkData(data))
     
     return temp
 }
 
+
+// Since the latest photos of rover Spirit and Opportunity only includes 1 and 2 images, 
+// I have chosen to add an extra call URL in the server (index.js) for a fixed date where 
+// they both have more images to show. Since the two calls required different URLs and because the response
+// from both calls are different. I have created a function checkData, that checks if the response 
+// has a key of 'latest_photos'. If so I assign this data to the 'photos' key, in order to render the image array.
+
 function checkData(data){
+
 
     const dataToCheck = Object.assign(data)
 
+    // Since the data 
     if(Object.keys(dataToCheck.data) == 'latest_photos') {
         
         Object.defineProperty(data.data, 'photos', Object.getOwnPropertyDescriptor(data.data, "latest_photos"));
@@ -191,6 +205,7 @@ function checkData(data){
 
 }
 
+// Function to initiate the call to the server (index.js) and assign the response data to the Global state.
 async function getInformationAboutRover(state){
 
    const dataFrom_apiCaller = await Object.assign(apiCaller(state))
