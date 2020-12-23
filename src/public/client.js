@@ -44,7 +44,7 @@ const App = (state) => {
 
             <section class="imagesSection">
             ${renderImages(rovers)}
-            <Button #seeMoreImagesBtn onClick="seeMoreImages(store)">See more images from this Rover</button>
+            <Button id="seeMoreImagesBtn" onClick="seeMoreImages(store)">See more images from this Rover</button>
             </section>
     
             <footer>
@@ -156,7 +156,9 @@ const renderImages = (props) =>{
     const images = props.data.photos.map(ele => ele)
 
     const imagesArr = images.map((ele) => 
-    `<div class="imageBox"><img class="image" src="${ele.img_src}" alt="Photo taken by ${props.roverChosen} on Mars on ${props.data.photos[0].earth_date}"/><p class="imageData">Camera: ${ele.camera.full_name}</p><p class="imageData">Picture taken on ${ele.earth_date}</p> <p>Sol: ${ele.sol}</p></div>`
+    `<div class="imageBox">
+        <img class="image" src="${ele.img_src}" alt="Photo taken by ${props.roverChosen} on Mars on ${props.data.photos[0].earth_date}"/>
+        <p class="imageData">Camera: ${ele.camera.full_name}</p><p class="imageData">Picture taken on ${ele.earth_date}</p> <p class="imageData">Sol: ${ele.sol}</p></div>`
     ).join(' ')
 
     return imagesArr
