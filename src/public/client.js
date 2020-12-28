@@ -1,10 +1,11 @@
+
 // Global State of the page
-let store = {
+let store = Immutable.Map({
     roverChosen: '',
-    data: '',
+    data: {},
     imageDate: '',
-    rovers: Immutable.List(['Curiosity', 'Opportunity', 'Spirit'])
-}
+    rovers: ['Curiosity', 'Opportunity', 'Spirit']
+})
 
 
 // Adding markup to the page
@@ -12,6 +13,7 @@ const root = document.getElementById('root')
 
 // Rendering the content in the root of the HTML, with the data of the Global State
 const render = async (root, state) => {
+    console.log('state in render', state._root.entries)
     root.innerHTML = App(state)
 }
 
@@ -24,55 +26,61 @@ window.addEventListener('load', () => {
 // Content included in the App that will be rendered
 const App = (state) => {    
 
+    console.log(state._root.entries)
     const rovers  = Object.assign(state)
-
+    console.log("rovers", rovers._root.entries);
     // Checking to  see if data has been passed to the state
-    if(rovers.data !== '' && rovers.data.photos !== []) {
+    console.log('first statement', rovers._root.entries[1][1]);
+    console.log('second statement', rovers._root.entries[1].photos);
+        // if(rovers._root.entries[1][1] != '' && rovers._root.entries[1].photos != []) {
+    // if((rovers._root.entries[1][1]['size'] != 0 || rovers._root.entries[1][1]['size'] != undefined)) {
+    
     // If state has been updated with data from the API, the render the following.
 
         // If the roverChosen is not curiosity and imageDate is still '' 
-        if(rovers.roverChosen !== 'curiosity' && rovers.imageDate === '') {
+        // if(rovers.roverChosen !== 'curiosity' && rovers.imageDate === '') {
 
-            return (`
-            <header>
-                ${headerSection()}
-            </header>
+        //     return (`
+        //     <header>
+        //         ${headerSection()}
+        //     </header>
         
-            <section class="roverInfoSection"> 
-            ${renderRoverInfo(rovers)}
-            </section>
+        //     <section class="roverInfoSection"> 
+        //     ${renderRoverInfo(rovers)}
+        //     </section>
 
-            <section class="imagesSection">
-            ${renderImages(rovers)}
-            <Button id="seeMoreImagesBtn" onClick="seeMoreImages(store)">See more images from this Rover</button>
-            </section>
+        //     <section class="imagesSection">
+        //     ${renderImages(rovers)}
+        //     <Button id="seeMoreImagesBtn" onClick="seeMoreImages(store)">See more images from this Rover</button>
+        //     </section>
     
-            <footer>
-                <p>Created by Lasse Mollerup * Rover image-credit to NASA * Button image-background credit to Vitaliy Zamedyanskiy, Yue-Liu and Nicolas Lobos</p>
-            </footer>
-            `)
-        } 
+        //     <footer>
+        //         <p>Created by Lasse Mollerup * Rover image-credit to NASA * Button image-background credit to Vitaliy Zamedyanskiy, Yue-Liu and Nicolas Lobos</p>
+        //     </footer>
+        //     `)
+        // } 
         // Otherwise return the following view for all the rovers
-        else {  return (`
-            <header>
-                ${headerSection()}
-            </header>
+    //     else {  return (`
+    //         <header>
+    //             ${headerSection()}
+    //         </header>
         
-            <section class="roverInfoSection"> 
-            ${renderRoverInfo(rovers)}
-            </section>
+    //         <section class="roverInfoSection"> 
+    //         ${renderRoverInfo(rovers)}
+    //         </section>
 
-            <section class="imagesSection">
-            ${renderImages(rovers)}
-            </section>
+    //         <section class="imagesSection">
+    //         ${renderImages(rovers)}
+    //         </section>
 
-            <footer>
-                <p>Created by Lasse Mollerup * Rover image-credit to NASA * Button image-background credit to Vitaliy Zamedyanskiy, Yue-Liu and Nicolas Lobos</p>
-            </footer>
-            `)}
-    } 
+    //         <footer>
+    //             <p>Created by Lasse Mollerup * Rover image-credit to NASA * Button image-background credit to Vitaliy Zamedyanskiy, Yue-Liu and Nicolas Lobos</p>
+    //         </footer>
+    //         `)}
+    // } 
     // If no data has been added to the Global state then only render the Header with the rover buttons and the the footer.
-    else return (`
+    // else 
+    return (`
         <header>
         ${headerSection()}
         </header>
@@ -86,29 +94,46 @@ const App = (state) => {
 // ------------------------------------------------------  COMPONENTS
 
 // Componenent to update the Global state
-const updateStore = (store, newState) => {
-    store = Object.assign(store, newState)
+const updateStore = (state, newState) => {
+
+    console.log('newState updateStore', newState)
+    console.log('state updateStore', state._root.entries)
+
+    let store = state.set(...newState)
+
+ 
+    console.log('store after update', store)
+  
+    console.log('store_entries after update', store._root.entries)
+    
     render(root, store)
+
+    return store
 }
 
 // Conponent reffering to onClick call on the Rover buttons
 function pickRover(string, state){
-
+    console.log('state._entries in PickRover', state._root.entries);
     const roverChosen = string 
-    const pickedRover = { roverChosen }
+    const pickedRover = [ 'roverChosen', roverChosen ]
+
+    console.log('pickedRover in pickedRover', pickedRover);
 
     // Updating the Global State with the name of the rover chosen
-    updateStore(state, pickedRover)
+    const newstore = updateStore(state, pickedRover)
  
+
+    console.log('state after update', newstore)
+
     // Initiating the API-call-function to get information from the server using the updated state
-    return getInformationAboutRover(state);
+    return getInformationAboutRover(newstore);
 
 }
 
 // Conponent reffering to onClick call on the seeMoreImagesBtn button
 function seeMoreImages(state){
 
-    const imageDate = (state.roverChosen === 'Spirit') ? '2010-01-21' : '2018-02-11'
+    const imageDate = (state._root.entries[0][1] === 'Spirit') ? '2010-01-21' : '2018-02-11'
 
     const datePicked = { imageDate }
     
@@ -139,21 +164,24 @@ const headerSection = () =>{
 const renderRoverInfo = (props) =>{
 
     const rovers = Object.assign(props)
-
+    console.log('rovers in renderRoverInfo', rovers);
     return (`
         <div class="roverDetails">
-            <h2>Rover Name: ${rovers.roverChosen}</h2>
-            <h3>Launch Date: ${rovers.data.photos[0].rover.launch_date}</h3>
-            <h3>Landing Date: ${rovers.data.photos[0].rover.landing_date}</h3>
-            <h3><strong>Date corresponding to date on Earth:</strong> ${rovers.data.photos[0].earth_date}</h3> 
+            <h2>Rover Name: ${rovers._root.entries[0][1]}</h2>
+       
         </div>
         `) 
 }
 
+{/* <h3>Launch Date: ${rovers.data.photos[0].rover.launch_date}</h3>
+<h3>Landing Date: ${rovers.data.photos[0].rover.landing_date}</h3>
+<h3><strong>Date corresponding to date on Earth:</strong> ${rovers.data.photos[0].earth_date}</h3>  */}
+
 // The HTML that will be rendered in the imagesSection with images and image data from the state 
 const renderImages = (props) =>{
-
-    const images = props.data.photos.map(ele => ele)
+    console.log('props', props);
+    console.log('props._root.entries[1][1].data.photos', props._root.entries[1][1].data.photos)
+    const images = props._root.entries[1][1].data.photos.map(ele => ele)
 
     const imagesArr = images.map((ele) => 
     `<div class="imageBox">
@@ -168,20 +196,28 @@ const renderImages = (props) =>{
 
 // async function to call from the client to the server (index.js)
 async function apiCaller(state){
-
+    console.log('state before call', state._root.entries);
     // checking which rover has been chosen
-    const nameParam = state.roverChosen
-
+    const nameParam = state._root['entries'][0][1]
+    console.log('nameParam before call', state._root['entries'][0][1]);
+    console.log('nameParam before call', nameParam);
     // calling the server (index.js) with the chosen rover and imageDates value as params.
     const res = await fetch(`http://localhost:3000/rovers?name=${nameParam}&date=${state.imageDate}`)
 
-    const data = await res.json()
+    // console.log('response from Call', res);
+    const dataFromCall = await res.json()
 
+    console.log('dataFromCall after call', dataFromCall)
     // Once the reponse has been received from the server (index.js) run the following function 
     // to make sure the state.data.photos is not []
-    let temp = Object.assign(checkData(data))
-    
-    return temp
+
+    const data = Object.assign(checkData(dataFromCall)).data['photos']
+
+    const cleanedData = [ 'data', data ]
+
+    console.log('data', cleanedData)
+ 
+    return cleanedData
 }
 
 
@@ -201,6 +237,7 @@ function checkData(data){
         
         Object.defineProperty(data.data, 'photos', Object.getOwnPropertyDescriptor(data.data, "latest_photos"));
         delete Object.keys(data.data);
+        console.log('dataToCheck22', dataToCheck)
         return dataToCheck
     } 
     else return dataToCheck
@@ -209,8 +246,9 @@ function checkData(data){
 
 // Function to initiate the call to the server (index.js) and assign the response data to the Global state.
 async function getInformationAboutRover(state){
-
+    console.log("state in getInformationAboutRover", state._root.entries);
    const dataFrom_apiCaller = await Object.assign(apiCaller(state))
-  
-   updateStore(store, dataFrom_apiCaller)     
+
+  console.log('dataFrom_apiCaller', dataFrom_apiCaller)
+   return updateStore(state, dataFrom_apiCaller)     
 }
