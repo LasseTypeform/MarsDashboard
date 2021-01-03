@@ -16,6 +16,8 @@
     "immutability-helper": "^3.1.1",
     "immutable": "^4.0.0-rc.12",
     "node-fetch": "^2.6.0",
+    "react-redux": "^7.2.2",
+    "redux": "^4.0.5",
     "require.js": "^1.0.0"
   }
 }
