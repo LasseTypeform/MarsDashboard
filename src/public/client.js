@@ -4,7 +4,10 @@ let store = Immutable.Map({
     roverChosen: '',
     data: {},
     imageDate: '',
-    rovers: ['Curiosity', 'Opportunity', 'Spirit']
+    rovers: ['Curiosity', 'Opportunity', 'Spirit'],
+    launch_date: '',
+    landing_date: '',
+    earth_date: ''
 })
 
 // Adding markup to the page
@@ -22,7 +25,7 @@ window.addEventListener('load', () => {
 
 // Content included in the App that will be rendered
 const App = (state) => {    
-    console.log('state', state);
+    console.log('state', state._root.entries);
 
     const rovers  = Object.assign(state)
    
@@ -89,6 +92,7 @@ const App = (state) => {
 // Componenent to update the Global state
 const updateStore = (property, value) => {
     store = store.set(property, value)
+    console.log('store', store._root.entries);
     render(root, store)
 }
 
@@ -96,10 +100,10 @@ const updateStore = (property, value) => {
 function pickRover(name){
 
     const roverChosenfromPicker = name 
- 
+    const resetImageDate = ''
     // Updating the Global State with the name of the rover chosen
     updateStore('roverChosen', roverChosenfromPicker)
-    updateStore('imageDate', '')
+    updateStore('imageDate', resetImageDate)
  
     // Initiating the API-call-function to get information from the server using the updated state
     return getInformationAboutRover(store);
@@ -118,6 +122,21 @@ function seeMoreImages(state){
     return getInformationAboutRover(store); 
 
 }
+
+// listening for load event because page should load before any JS is called
+// window.getElementById("myBtn").addEventListener('click', (state) => {
+
+//     const datePicked = (state.roverChosen === 'Spirit') ? '2010-01-21' : '2018-02-11'
+    
+//     // Updating the Global State with the name of the rover chosen
+//     updateStore('imageDate', datePicked)
+    
+//     getInformationAboutRover(store); 
+
+//     // Initiating the API-call-function to get information from the server using the updated state
+//     return render(root, store)
+
+// })
 
 // The HTML that will be rendered in the headerSection
 const headerSection = () =>{
@@ -141,10 +160,10 @@ const renderRoverInfo = (props) =>{
 
     return (`
         <div class="roverDetails">
-            <h2>Rover Name: ${rovers._root.entries[0][1]}</h2>
-            <h3>Launch Date: ${rovers._root.entries[1][1][0]['rover']['launch_date']}</h3>
-            <h3>Landing Date: ${rovers._root.entries[1][1][0]['rover']['landing_date']}</h3>
-            <h3><strong>Date corresponding to date on Earth:</strong> ${rovers._root.entries[1][1][0].earth_date}</h3> 
+            <h2>Rover Name: ${rovers.get("roverChosen")}</h2>
+            <h3>Launch Date: ${rovers.get('launch_date')}</h3>
+            <h3>Landing Date: ${rovers.get('landing_date')}</h3>
+            <h3><strong>Date corresponding to date on Earth:</strong> ${rovers.get('earth_date')}</h3> 
         </div>
         `) 
 }
@@ -153,12 +172,12 @@ const renderRoverInfo = (props) =>{
 
 // The HTML that will be rendered in the imagesSection with images and image data from the state 
 const renderImages = (props) =>{
-
+    console.log('props', props);
     const images = props._root.entries[1][1].map(ele => ele)
 
     const imagesArr = images.map((ele) => 
     `<div class="imageBox">
-        <img class="image" src="${ele.img_src}" alt="Photo taken by ${props._root.entries[0][1]} on Mars on ${ele.earth_date}"/>
+        <img class="image" src="${ele.img_src}" alt="Photo taken by ${props.get("roverChosen")} on Mars on ${props.get("earth_date")}"/>
         <p class="imageData">Camera: ${ele['camera']['full_name']}</p><p class="imageData">Picture taken on ${ele.earth_date}</p> <p class="imageData">Sol: ${ele.sol}</p></div>`
     ).join(' ')
 
@@ -170,6 +189,7 @@ const renderImages = (props) =>{
 // async function to call from the client to the server (index.js)
 async function apiCaller(state){
 
+    console.log('state before call', state._root.entries);
     // checking which rover has been chosen
     const nameParam = state._root.entries[0][1]
 
@@ -196,7 +216,7 @@ function checkData(data){
 
     const dataToCheck = Object.assign(data)
 
-    // Since the data 
+   
     if(Object.keys(dataToCheck.data) == 'latest_photos') {
         
         Object.defineProperty(data.data, 'photos', Object.getOwnPropertyDescriptor(data.data, "latest_photos"));
@@ -212,5 +232,9 @@ async function getInformationAboutRover(state){
 
    const dataFrom_apiCaller = await Object.assign(apiCaller(state))
 
-   updateStore('data', dataFrom_apiCaller.data.photos)     
+   console.log('dataFrom_apiCaller', dataFrom_apiCaller);
+   updateStore('data', dataFrom_apiCaller.data.photos)  
+   updateStore('launch_date', dataFrom_apiCaller.data.photos[0]['rover']['launch_date'])  
+   updateStore('landing_date', dataFrom_apiCaller.data.photos[0]['rover']['landing_date'])  
+   updateStore('earth_date', dataFrom_apiCaller.data.photos[0].earth_date)  
 }

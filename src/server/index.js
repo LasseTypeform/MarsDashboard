@@ -28,30 +28,24 @@ app.get('/rovers', async (req, res) => {
     
         // Checking if imageDate has been changed and if the RoverChosen is not curiosity. 
         // If so, a call is made for a specifc date wher both rovver Spirit and Opportunity has more images included.
-        if((req.query.date != undefined || req.query.date !== undefined != '') && (nameParam != 'curiosity')){
+        if((req.query.date != undefined || req.query.date !== '') && (nameParam != 'curiosity')){
             
             if(nameParam !== 'curiosity') {
-                    console.log('URL', `https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/photos?earth_date=2010-01-21&api_key=${process.env.API_KEY}`)
                 return `https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/photos?earth_date=2010-01-21&api_key=${process.env.API_KEY}`
             } 
            
         }
         // The default call to get the latest photos for each of the three rovers 
         else { 
-            console.log('URL', `https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/latest_photos?api_key=${process.env.API_KEY}`)
-            
             return `https://api.nasa.gov/mars-photos/api/v1/rovers/${nameParam}/latest_photos?api_key=${process.env.API_KEY}`
             }
     }
-    
     try {
         let data = await fetch(URLdependingOnDate(req))
           .then(res => 
               res.json()
               )
           res.send({ data })
-      
-     
     } catch (err) {
         console.log('error:', err);
     }
