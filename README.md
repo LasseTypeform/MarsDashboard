@@ -1,34 +1,51 @@
 # Functional Programming with Javascript 
 
-## Student Instructions
+## Student's (Lasse Mollerup) Instructions
 
-### Big Picture
+<!-- Clone Project -->
+To start this project use the following code in your terminal
+
+git clone https://github.com/LasseTypeform/MarsDashboard.git
+
+<!-- Get NASA API Key -->
+Afterwards make sure you have an API key NASA’s API.
+
+If you don't have one, go to https://api.nasa.gov/ and create your own. 
+
+Once you have your own API key you can add it instead of apiKeyValue in the .env file of the project.
+
+<!-- Use NPN or YARN to run the project -->
+Make sure NPM or YARN is installed, or add it with the followign:
+YARN https://classic.yarnpkg.com/en/docs/install
+NPM https://docs.npmjs.com/about-npm-versions
+
+
+Once installed, run go to the project from the terminal and run npm start or yarn start. 
+
+Open your browser and paste in http://localhost:3000/ 
+
+<!-- Instructions of the page once open in the browser -->
+You will then be able to choose between 3 different rovers. Click on one of them to see the latest images. 
+<!-- My add on for this project -->
+This project only required to see the latest photos of each rover. 
+However, when I started the project the latest photos from rover Spirit and Opportunity only includes 1 and 2 images, 
+I have therefore chosen to add an extra call URL in the server (index.js) for a fixed date where 
+they both have more images to show. Since the two calls required different URLs and because the response
+from both calls are different. I have created a function checkData, that checks if the response 
+has a key of 'latest_photos'. If so I assign this data to the 'photos' key, in order to render the image array.
+
+## My general approach to the project
+I have tried to write my code DRY, clean and easy to read, by adding comments all along the project. 
+
+To make my code predictable, I am using pure functions coupled with a global state contained in Immutable.js. 
+I have chosen this approach to guarantee a code in which there won't be any mutations (except dom manipulation in this case). For the same input, the result you will get is always the same.
+
+Along with my many comments in the code, the functional approach makes debugging much easier, as it is easier to know which function has which responsibility. And when a bug occurs, you are confident where to look at. 
+
+
+### Big Picture provided on the project from Udacity
 
 You are going to create a Mars rover dashboard that consumes the NASA API. Your dashboard will allow the user to select which rover's information they want to view. Once they have selected a rover, they will be able to see the most recent images taken by that rover, as well as important information about the rover and its mission. Your app will make use of all the functional concepts and practices you have learned in this course, and the goal is that you would become very comfortable using pure functions and iterating over, reshaping, and accessing information from complex API responses. 
-
-### Getting Started
-
-We have supplied some of the foundational code for you. So follow these steps to get started:
-
-1. We'll start with the typical setup - clone theis repo and install the dependencies
-
- - [ ] To clone the repo, remember to clone just the starter branch:
-
-```git clone --single-branch --branch starter <repo-name>```
-
- - [ ] For this project we are using yarn as our package manager, so to install your depencies run:
-
-```yarn install``` 
-
-**If you don’t have yarn installed globally, follow their installation documentation here according to your operating system: https://yarnpkg.com/lang/en/docs/install
-
-2. Next you'll need a NASA developer API key in order to access the API endpoints. To do that, go here: https://api.nasa.gov/. If you want to simply look around at what api endpoints NASA offers, you can use their provided DEMO_KEY to do this.
-
-3. In your repo, you will see a .env-example file with a place for your API key. Rename or copy the file to one called `.env` and enter in your key. Now that you have your key, just remember to add it as a parameter to every request you make to NASA.
-
-5. Run `yarn start` in your terminal and go to `http:localhost:3000` to check that your app is working. If you don't see an image on the page, check that your api key is set up correctly.
-
-6. Remember to commit frequently, use branches, and leave good commit messages! You'll thank yourself later.
 
 ### Project Requirements
 
