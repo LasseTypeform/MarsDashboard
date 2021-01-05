@@ -18,11 +18,9 @@ app.use('/', express.static(path.join(__dirname, '../public')))
 // Get information about Rover
 app.get('/rovers', async (req, res) => {
 
-
-    console.log(req)
     // determinating the URL depending on the state in the req
     const URLdependingOnDate = (req) => {
-        console.log('req.query', req.query)
+
         // changing the rover name to lower case according to the URL call
         const nameParam  = Object.assign(req.query.name.toLowerCase())
     
